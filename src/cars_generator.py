@@ -1,7 +1,8 @@
-file = open('nyc_parking_tickets_extract.csv')
+def file_reader(file):
+    with open(file) as file:
+        for line in file:
+            print(line)
 
-for i in range(40):
-    print(file.readline())
 
-
+file_reader('nyc_parking_tickets_extract.csv')
 
