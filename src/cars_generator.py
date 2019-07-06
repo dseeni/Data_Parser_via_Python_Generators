@@ -32,16 +32,20 @@ with open(filename) as file:
     print(cars_type)
     
     # print(len(cars))
-    # print(date_type)
+    print(data_type)
     # print(list(zip(data, date_type)))
 
-def cast(data_type, value):
-    if data_type == 'DOUBLE':
-        return float(value)
-    elif data_type == 'INT':
-        return int(value)
-    else:
-        return str(value)
+    def cast(data_type, value):
+        if data_type == 'float':
+            return float(value)
+        elif data_type == 'int':
+            return int(value)
+        else:
+            return str(value)
+    final = [cast(data_type, value) for data_type, value in zip(data_type, data)]
+
+    final = Car(*final)
+    print(final)
 
 # def file_reader(self):
 #     with open(self.file) as csv:
