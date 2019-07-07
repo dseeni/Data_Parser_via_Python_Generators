@@ -30,7 +30,6 @@ with open(filename) as file:
     cars_type = Car(*data_type)
     print(cars)
     print(cars_type)
-    
     # print(len(cars))
     print(data_type)
     # print(list(zip(data, date_type)))
