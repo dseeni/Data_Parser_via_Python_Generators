@@ -2,14 +2,14 @@ from collections import namedtuple
 from datetime import date
 
 filename = 'nyc_parking_tickets_extract.csv'
-#  Summons Number int
-#  Plate ID str
-#  Registration State str
-#  Plate Type str
-#  Issue Date date
-#  Violation Code int
-#  Vehicle Body Type str
-#  Vehicle Make str
+#  Summons Number: int
+#  Plate ID: str
+#  Registration State: str
+#  Plate Type: str
+#  Issue Date: date
+#  Violation Code: int
+#  Vehicle Body Type: str
+#  Vehicle Make: str
 #  Violation Description str
 with open(filename) as file:
     file_iter = iter(file)
