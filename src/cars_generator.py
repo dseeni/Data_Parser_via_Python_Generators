@@ -12,7 +12,7 @@ from datetime import date
 #  Violation Description str
 
 source_file = 'nyc_parking_tickets_extract.csv'
-cars_header_label = ['int', 'str', 'str', 'str', 'date', 'int', 'str', 'str', 'str']
+cars_header_label =['int', 'str', 'str', 'str', 'date', 'int', 'str', 'str', 'str']
 
 
 # you should make this class work with any files, let it in take in the key, and from there case objects
@@ -22,50 +22,40 @@ class FileReader:
         self._filename = filename
         self._data_key = header_key
         self._headers = None
+        self._file_read = []
 
     def __iter__(self):
-        return FileReader.readline(self._filename)
+        return FileReader.clean_row(self)
 
-    def readline(self):
+    def clean_row(self):
         with open(self._filename) as file:
+
             # class io.TextTOWrapper
-            file_iter = iter(file)
-            # strip out the line ending '\n'
-            headers = next(file_iter).strip('\n')
+            # strip out the row ending '\n'
+            headers = next(file).strip('\n')
 
             # clean out white space in header labels
-            headers: str = headers.replace(" ", "_")
-
-            # data is a list of strings from second line down
-            data: list = next(file_iter).strip('\n').split(',')
-            # print('data = ', data)
-
-            # namedtuple unpacking headers string
-            Car = namedtuple('Car', headers)
-
+            headers_clean: str = headers.replace(" ", "_")
             # spiting the headers string into a list of strings
-            headerlist = headers.split(',')
-            # print('headers = ', headers)
+            self._headers = headers_clean.split(',')
+            yield headers_clean
 
-            data_type_list = ['int', 'str', 'str', 'str', 'date', 'int', 'str', 'str', 'str']
-            cars = Car(*data)
-            # print('cars = ', cars)
-            cars_type = Car(*data_type_list)
-            # print(cars)
-            # print(cars_type)
-            # print(len(cars))
-            # print(data_type_list)
+            for row in file:
+                # data is a list of strings from second row down
+                data: list = row.strip('\n').split(',')
+                # print('data = ', data)
 
-            final = [FileReader.cast(data_type, value) for data_type, value in zip(data_type_list, data)]
-            final[4] = FileReader.date_modifier(final[4])
+                # namedtuple unpacking headers string seperting elements by comma
+                Row = namedtuple('Row', headers_clean)
+                #self._file_read.append(self._headers)
+                # print('self._headers = ',self._headers)
+                # print('50:', 'self._headers ''='' ',self
+                final_data_list = [FileReader.cast(data_type, value) for data_type, value in zip(self._data_key, data)]
 
-            print('61:', 'final[4] ''='' ', final[4])
-            print('62:', 'final[4] ''='' ', final[4])
-
-            finalheaderrow = Car(*headerlist)
-            finaldatarow = Car(*final)
-            # print(finalheaderrow, sep='\n')
-            return finaldatarow
+                final_data_list[4] = FileReader.date_modifier(final_data_list[4])
+                finaldatarow = Row(*final_data_list)
+                # self._file_read.append(finaldatarow)
+                yield finaldatarow
 
     @staticmethod
     def cast(data_type, data_value):
@@ -77,19 +67,20 @@ class FileReader:
             return str(data_value)
 
     @staticmethod
-    def date_modifier(row):
-        date_list = row.split('/')
-        date_format_type = ['int' for i in range(4)]
-        finaldate = [FileReader.cast(date_format_type, date_list)
-                     for date_format_type, date_list in zip(date_format_type, date_list)]
+    def date_modifier(date_string):
+        date_list = date_string.split('/')
+        date_format_key = ['int' for i in range(3)]
+        finaldate = [FileReader.cast(date_format_key, date_list)
+                     for date_format_key, date_list in zip(date_format_key, date_list)]
         assert all(isinstance(i, int) for i in finaldate)
-        date_object = date(*reversed(finaldate))
-        assert date_object.year == 2016
-        assert date_object.month == 5
-        assert date_object.day == 10
+        date_object = date(finaldate[2], finaldate[0], finaldate[1])
+        # assert date_object.year == 2016
+        # assert date_object.month == 5
+        # assert date_object.day == 10
         return date_object
 
 
 file = FileReader(source_file, cars_header_label)
-row = [i for i in range(10)]
-
+fileiter = iter(file)
+for i in range(100):
+    print(next(fileiter))
