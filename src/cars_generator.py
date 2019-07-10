@@ -11,16 +11,19 @@ from datetime import date
 #  Vehicle Make: str
 #  Violation Description str
 
-source_file = 'nyc_parking_tickets_extract.csv'
+# source_file = 'nyc_parking_tickets_extract.csv'
 # cars_header_label =['int', 'str', 'str', 'str', 'date', 'int', 'str', 'str', 'str']
 
+# TODO: make all properties lazy properties
+# TODO: unit test everything
+# TODO: you should make this class work with any files, let it in take in the key, and from there case objects
 
-# you should make this class work with any files, let it in take in the key, and from there case objects
+
 class FileReader:
 
     def __init__(self, filename, column_to_track,*, date_column=None):
         if not(isinstance(column_to_track, str)):
-            raise ValueError('label_to_count must be str')
+            raise TypeError('column_to_track must be of type str')
         self.filename = filename
         self.column_to_track = column_to_track
         self.column_counter = defaultdict(int)
@@ -77,13 +80,17 @@ class FileReader:
 
             for row in file:
                 try:
-                    # data is a list of strings from second row down
+                    # extract data as a list of strings from second row down
                     data: list = row.strip('\n').split(',')
                     final_data_list = \
                         [FileReader.cast(data_type, value) for data_type, value in zip(self.data_key, data)]
 
-                    final_data_list[self.date_column] = FileReader.date_modifier(final_data_list[self.date_column])
+                    # parse date into data object
+                    if self.date_column is not None:
+                        final_data_list[self.date_column] = FileReader.date_modifier(final_data_list[self.date_column])
                     finaldatarow = Row(*final_data_list)
+
+                    # store tracking column in frequency counter dictionary
                     if getattr(finaldatarow, self.column_track_name) in self.column_counter.keys():
                         current_vehicle_count = self.column_counter.get(getattr(finaldatarow, self.column_track_name))
                         current_vehicle_count += 1
@@ -127,6 +134,9 @@ class FileReader:
         # assert date_object.day == 10
         return date_object
 
+    def __repr__(self):
+        return 'FileReader({0}, {1}, date_column={2})'.format(self.filename, self.column_to_track, self.date_column)
+
 
 # Summons_Number
 # Plate_ID
@@ -138,18 +148,18 @@ class FileReader:
 # Vehicle_Make
 # Violation_Description
 
-cars = FileReader(source_file, 'Vehicle_Make', date_column=4)
-car_row_generator = iter(cars)
-print('143:', 'type(car_row_generator) ''='' ', type(car_row_generator))
-for i in car_row_generator:
-    print(i)
-print('highest frequency item', cars.highest_frequency_item)
-print(cars.filename)
-print(cars.data_key)
-print(cars.headers)
-print(cars.column_to_track)
-print(cars.column_counter)
-print(cars.track_column_index_number)
-print(cars.column_track_name)
-print(cars.column_counter_highest_frequency_key)
-print(cars.highest_frequency_item)
+# cars = FileReader(source_file, 'Vehicle_Make', date_column=None)
+# car_row_generator = iter(cars)
+# print('143:', 'type(car_row_generator) ''='' ', type(car_row_generator))
+# for i in car_row_generator:
+#     print(i)
+# print('150', 'highest frequency item', cars.highest_frequency_item)
+# print(cars.filename)
+# print(cars.data_key)
+# print(cars.headers)
+# print(cars.column_to_track)
+# print(cars.column_counter)
+# print(cars.track_column_index_number)
+# print(cars.column_track_name)
+# print(cars.column_counter_highest_frequency_key)
+# print(cars.highest_frequency_item)
