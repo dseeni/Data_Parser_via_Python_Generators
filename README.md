@@ -1,6 +1,6 @@
 # Python Deep Dive Part 2 Project 3
 
-### Generic CSV data paraser via generators 
+### Generic CSV Data Paraser using Python Generators: 
 
 - FileReader(self, filename, column_to_track,*, date_column=None)
     
