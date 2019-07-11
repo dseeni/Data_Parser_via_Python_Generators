@@ -11,13 +11,6 @@ from datetime import date
 #  Vehicle Make: str
 #  Violation Description str
 
-# source_file = 'nyc_parking_tickets_extract.csv'
-# cars_header_label =['int', 'str', 'str', 'str', 'date', 'int', 'str', 'str', 'str']
-
-# TODO: make all properties lazy properties
-# TODO: unit test everything
-# TODO: you should make this class work with any files, let it in take in the key, and from there case objects
-
 
 class FileReader:
 
@@ -135,8 +128,9 @@ class FileReader:
         return 'FileReader({0}, {1}, date_column={2})'.format(self.filename, self.column_to_track, self.date_column)
 
 
-# source_file = 'nyc_parking_tickets_extract.csv'
-# file = FileReader(source_file, 'Vehicle_Make', date_column=4)
+# file = FileReader(source_file, 'Vehicle_Body_Type', date_column=4)
 # filegen = iter(file)
 # for i in filegen:
 #     print(i)
+#
+# print('136:', 'file.highest_frequency_item ''='' ', file.highest_frequency_item)
