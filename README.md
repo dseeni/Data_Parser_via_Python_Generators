@@ -13,7 +13,7 @@
 
 ### Processing "nyc_parking_tickets_extract.csv":
 
-**_Here are the most common citations by..._**
+**_Here are the highest frequency citations sorted by..._**
 
 - Vehicle Make: ('TOYOT', 112)
 
