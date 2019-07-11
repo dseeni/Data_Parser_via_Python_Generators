@@ -4,15 +4,16 @@
 
 - FileReader(self, filename, column_to_track,*, date_column=None)
     
-- Automatically cast column data into respective data types: float, string, integer, date
+- Second row data will automatically determine the data types for .csv file: float, string, integer, date
 
 - Date restricted only to one column via date_column 
 
-- Return the frequency distribution of data via column_to_track 
-    * Make sure you white space is replaced with "_" for column_to_track
+- Return the frequency distribution of data per Column Header via column_to_track 
+    * Make sure you replace white space with "_" when passing in header names to column_to_track
 
 ### Processing "nyc_parking_tickets_extract.csv":
-**_Most Common Citations by..._**
+
+**_Here are the most common citations by..._**
 
 - Vehicle Make: ('TOYOT', 112)
 
