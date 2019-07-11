@@ -79,34 +79,31 @@ class FileReader:
             yield self.headers
 
             for row in file:
-                try:
-                    # extract data as a list of strings from second row down
-                    data: list = row.strip('\n').split(',')
-                    final_data_list = \
-                        [FileReader.cast(data_type, value) for data_type, value in zip(self.data_key, data)]
+                # extract data as a list of strings from second row down
+                data: list = row.strip('\n').split(',')
+                final_data_list = \
+                    [FileReader.cast(data_type, value) for data_type, value in zip(self.data_key, data)]
 
-                    # parse date into data object
-                    if self.date_column is not None:
-                        final_data_list[self.date_column] = FileReader.date_modifier(final_data_list[self.date_column])
-                    finaldatarow = Row(*final_data_list)
+                # parse date into data object
+                if self.date_column is not None:
+                    final_data_list[self.date_column] = FileReader.date_modifier(final_data_list[self.date_column])
+                finaldatarow = Row(*final_data_list)
 
-                    # store tracking column in frequency counter dictionary
-                    if getattr(finaldatarow, self.column_track_name) in self.column_counter.keys():
-                        current_vehicle_count = self.column_counter.get(getattr(finaldatarow, self.column_track_name))
-                        current_vehicle_count += 1
-                        self.column_counter[getattr(finaldatarow, self.column_track_name)] = current_vehicle_count
-                    else:
-                        self.column_counter[getattr(finaldatarow, self.column_track_name)] = 1
+                # store tracking column in frequency counter dictionary
+                if getattr(finaldatarow, self.column_track_name) in self.column_counter.keys():
+                    current_vehicle_count = self.column_counter.get(getattr(finaldatarow, self.column_track_name))
+                    current_vehicle_count += 1
+                    self.column_counter[getattr(finaldatarow, self.column_track_name)] = current_vehicle_count
+                else:
+                    self.column_counter[getattr(finaldatarow, self.column_track_name)] = 1
 
-                    self.column_counter_highest_frequency_key = \
-                        sorted(self.column_counter, key=lambda k: self.column_counter[k], reverse=True)
-                    self.highest_frequency_item = (self.column_counter_highest_frequency_key[0],
-                                                   self.column_counter.get
-                                                   (self.column_counter_highest_frequency_key[0]))
-                    yield finaldatarow
-                except StopIteration:
-                    continue
-            yield 'File Processed!'
+                self.column_counter_highest_frequency_key = \
+                    sorted(self.column_counter, key=lambda k: self.column_counter[k], reverse=True)
+                self.highest_frequency_item = (self.column_counter_highest_frequency_key[0],
+                                               self.column_counter.get
+                                               (self.column_counter_highest_frequency_key[0]))
+                yield finaldatarow
+        yield ('File Processed!')
 
     @staticmethod
     def cast(single_data_value, data_value):
@@ -138,3 +135,8 @@ class FileReader:
         return 'FileReader({0}, {1}, date_column={2})'.format(self.filename, self.column_to_track, self.date_column)
 
 
+# source_file = 'nyc_parking_tickets_extract.csv'
+# file = FileReader(source_file, 'Vehicle_Make', date_column=4)
+# filegen = iter(file)
+# for i in filegen:
+#     print(i)

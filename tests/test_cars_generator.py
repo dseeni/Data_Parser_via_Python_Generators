@@ -45,11 +45,12 @@ def test_file_reader_column_to_track_new_column_2(test_file):
 
 
 def test_file_reader_sort_header_key_value_is_none(test_file):
-    test_file.data_key = ['123', '123', 'asfasdf1,', '1.1.1', '1.000', None, '1.1']
+    test_file.data_key = ['123', '123', 'asfasdf1,', '1.1.1', '1.000', None, '1.1', '1.00x']
     test_file.sort_header_key()
     assert test_file.data_key[5] is None
     assert type(test_file.data_key[3]) == str
     assert type(test_file.data_key[4]) == float
+    assert type(test_file.data_key[7]) == str
 
 
 def test_file_reader_cast_method_branches(test_file):
