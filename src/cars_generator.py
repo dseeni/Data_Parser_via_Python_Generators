@@ -48,7 +48,7 @@ class FileReader:
             elif value.count('.') == 1:
                 try:
                     self.data_key[self.data_key.index(value)] = float(value)
-                except TypeError:
+                except ValueError:
                     self.data_key[self.data_key.index(value)] = str(value)
 
             else:
@@ -138,28 +138,3 @@ class FileReader:
         return 'FileReader({0}, {1}, date_column={2})'.format(self.filename, self.column_to_track, self.date_column)
 
 
-# Summons_Number
-# Plate_ID
-# Registration_State
-# Plate_Type
-# Issue_Date
-# Violation_Code
-# Vehicle_Body_Type
-# Vehicle_Make
-# Violation_Description
-
-# cars = FileReader(source_file, 'Vehicle_Make', date_column=None)
-# car_row_generator = iter(cars)
-# print('143:', 'type(car_row_generator) ''='' ', type(car_row_generator))
-# for i in car_row_generator:
-#     print(i)
-# print('150', 'highest frequency item', cars.highest_frequency_item)
-# print(cars.filename)
-# print(cars.data_key)
-# print(cars.headers)
-# print(cars.column_to_track)
-# print(cars.column_counter)
-# print(cars.track_column_index_number)
-# print(cars.column_track_name)
-# print(cars.column_counter_highest_frequency_key)
-# print(cars.highest_frequency_item)
